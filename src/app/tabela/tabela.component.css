@@ -1,0 +1,28 @@
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css");
+
+*{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+form{
+    width: 400px;
+    margin: auto;
+    flex-direction: column;
+}
+
+form div{
+    gap: 10px;
+}
+
+form input, form select{
+    margin-bottom: 5px;
+}
+
+table{
+    width: 80%;
+    margin: 100px auto;
+    flex-direction: column;
+}
