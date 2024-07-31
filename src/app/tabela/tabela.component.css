@@ -2,15 +2,27 @@
 
 *{
     width: 100%;
+}
+
+.titulo{
+    width: 100%;
     display: flex;
-    align-items: center;
     justify-content: center;
+    text-align: center;
+}
+
+.titulo h1{
+    margin: 10px auto;
 }
 
 form{
     width: 400px;
     margin: auto;
     flex-direction: column;
+}
+
+form label{
+    text-align: left;
 }
 
 form div{
@@ -25,4 +37,26 @@ table{
     width: 80%;
     margin: 100px auto;
     flex-direction: column;
+}
+
+table th, table td{
+    width: 20%;
+}
+
+.btnAcao{
+    width: 300px;
+    display: flex;
+    justify-content: space-around;
+}
+
+.btnAcao button{
+    width: 25px;
+    height: 25px;
+    margin: 5px;
+    border: none;
+    background-color: transparent;
+}
+
+.btnAcao button i{
+    font-size: 30px;
 }

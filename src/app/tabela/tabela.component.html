@@ -1,26 +1,44 @@
-<h1>Estoque da loja</h1>
+<div class="titulo">
+    <h1>Estoque da loja</h1>
+</div>
+
+<hr/>
 
 <form [formGroup]="formulario">
+
+    <!-- Nome -->
+    <div *ngIf="formulario.get('nome')?.hasError('required') && formulario.get('nome')?.touched">
+        <p class="alert alert-warning">Preencha o nome</p>
+    </div>
     <input type="text" formControlName="nome" class="form-control" placeholder="Nome">
+
+    <!-- Categoria -->
+    <div *ngIf="formulario.get('categoria')?.hasError('required') && formulario.get('categoria')?.touched">
+        <p class="alert alert-warning">Escolha a categoria</p>
+    </div>
+    <label>Categoria:</label>
     <select formControlName="categoria" class="form-select">
-        <option selected>Selecione a categoria</option>
-        <option value="bebida">Bebida</option>
-        <option value="comida">Comida</option>
-        <option value="embalagem">Embalagem</option>
-        <option value="prodLimpeza">Produto de limpeza</option>
+        <option value="Bebida">Bebida</option>
+        <option value="Comida">Comida</option>
+        <option value="Embalagem">Embalagem</option>
+        <option value="Produto de limpeza">Produto de limpeza</option>
     </select>
+    
+    <!-- Entrada e Saída -->
     <input type="number" formControlName="entrada" class="form-control" placeholder="Qtd de entrada de produtos">
     <input type="number" formControlName="saida" class="form-control" placeholder="Qtd de saída de produtos">
 
     <div>
-        <input type="button" class="btn btn-success" value="Cadastrar" (click)="cadastrar()" [disabled]="formulario.invalid">
+        <input type="button" class="btn btn-success" value="Cadastrar" (click)="cadastrar()" [disabled]="formulario.invalid" *ngIf="btnCadastrar">
+        <input type="button" class="btn btn-primary" value="Alterar" (click)="alterar()" *ngIf="!btnCadastrar">
+        <input type="button" class="btn btn-warning" value="Cancelar" (click)="cancelar()" *ngIf="!btnCadastrar">
     </div>
 </form>
 
 <table class="table">
     <thead>
         <tr>
-            <th>#</th>
+            <th class="primeiraColuna">#</th>
             <th>Nome</th>
             <th>Categoria</th>
             <th>Qtd.</th>
@@ -29,13 +47,13 @@
     </thead>
     <tbody>
         <tr *ngFor="let v of vetor; index as indice">
-            <td>{{ indice + 1 }}</td>
+            <td class="primeiraColuna">{{ indice + 1 }}</td>
             <td>{{ v.nome }}</td>
             <td>{{ v.categoria }}</td>
             <td>{{ v.qtdRestante }}</td>
-            <td>
-                <button><i class="bi bi-pencil-square"></i></button>
-                <button><i class="bi bi-trash"></i></button>
+            <td class="btnAcao">
+                <button (click)="selecionar(indice)"><i class="bi bi-pencil-square"></i></button>
+                <button (click)="excluir(indice)"><i class="bi bi-trash"></i></button>
             </td>
         </tr>
     </tbody>

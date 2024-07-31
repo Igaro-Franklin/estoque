@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Cadastro } from '../models/Cadastro';
 import { CommonModule } from '@angular/common';
 
@@ -8,14 +8,14 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './tabela.component.html',
-  styleUrls: ['./tabela.component.css']  // Corrigido styleUrl para styleUrls
+  styleUrls: ['./tabela.component.css']
 })
 export class TabelaComponent implements OnInit {
 
   // Objeto do formulário
   formulario = new FormGroup({
-    nome: new FormControl(''),
-    categoria: new FormControl(''),
+    nome: new FormControl('', Validators.required),
+    categoria: new FormControl('', Validators.required),
     entrada: new FormControl(''),
     saida: new FormControl(''),
   });
@@ -39,6 +39,11 @@ export class TabelaComponent implements OnInit {
 
   // Função para Cadastro
   cadastrar() {
+    if (this.formulario.invalid) {
+      alert('Preencha todos os campos obrigatórios.');
+      return;
+    }
+
     const formValues = this.formulario.value;
 
     // Conversão de valores do formulário para número
@@ -64,5 +69,83 @@ export class TabelaComponent implements OnInit {
 
     // Visualizar os dados da tabela
     console.table(this.vetor);
+  }
+
+  // Função para selecionar
+  selecionar(indice: number) {
+    // Atribuir o indice do produto selecionado
+    this.indice = indice;
+
+    // Passar os dados selecionados para o formulário
+    const selectedCadastro = this.vetor[indice];
+    this.formulario.setValue({
+      nome: selectedCadastro.nome,
+      categoria: selectedCadastro.categoria,
+      entrada: selectedCadastro.qtdRestante.toString(),
+      saida: '' // Campo de saída vazio
+    });
+
+    // Visibilidade dos botões
+    this.btnCadastrar = false;
+  }
+
+  // Função para alterar os dados
+  alterar() {
+    if (this.formulario.invalid) {
+      alert('Preencha todos os campos obrigatórios.');
+      return;
+    }
+
+    const formValues = this.formulario.value;
+
+    // Conversão de valores do formulário para número
+    const entrada = Number(formValues.entrada);
+    const saida = Number(formValues.saida);
+
+    // Atualizar o objeto Cadastro
+    const updatedCadastro = new Cadastro(
+      formValues.nome!,
+      formValues.categoria!,
+      entrada,
+      saida
+    );
+
+    // Alterar vetor
+    this.vetor[this.indice] = updatedCadastro;
+
+    // Salvar no localStorage
+    localStorage.setItem('cadastros', JSON.stringify(this.vetor));
+
+    // Limpar os inputs
+    this.formulario.reset();
+
+    // Visibilidade dos botões
+    this.btnCadastrar = true;
+  }
+
+  // Função de cancelar 
+  cancelar() {
+    // Limpar os inputs
+    this.formulario.reset();
+
+    // Visibilidade dos botões
+    this.btnCadastrar = true;
+  }
+
+  // Função de excluir
+  excluir(indice: number) {
+    if (confirm('Tem certeza que deseja excluir este item?')) {
+      // Remover o produto do vetor
+      this.vetor.splice(indice, 1);
+
+      // Salvar no localStorage
+      localStorage.setItem('cadastros', JSON.stringify(this.vetor));
+
+      // Limpar os inputs
+      this.formulario.reset();
+
+      // Visibilidade dos botões
+      this.btnCadastrar = true;
+    }
   }
 }
